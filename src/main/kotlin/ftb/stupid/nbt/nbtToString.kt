@@ -2,7 +2,7 @@ package ftb.stupid.nbt
 
 private val SIMPLE_VALUE = Regex("[A-Za-z0-9._+-]+")
 
-fun nbtToString(nbt: Nbt, indent: Int = 0): String =
+fun nbtToString(nbt: NBT, indent: Int = 0): String =
     SNBTBuilder(indent).apply { nbtToString(nbt) }.toString()
 
 class SNBTBuilder(var indent: Int = 0) {
@@ -46,7 +46,7 @@ class SNBTBuilder(var indent: Int = 0) {
     override fun toString() = stb.toString()
 }
 
-private fun SNBTBuilder.nbtToString(nbt: Nbt) {
+private fun SNBTBuilder.nbtToString(nbt: NBT) {
     when (nbt) {
         is NBTObject -> {
             if (nbt.map.isEmpty()) append("{}")

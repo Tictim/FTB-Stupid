@@ -33,7 +33,7 @@ open class JsonToNBT internal constructor(
         NBTException(message, string, cursor)
 
     @Throws(NBTException::class)
-    protected fun readTypedValue(): Nbt {
+    protected fun readTypedValue(): NBT {
         skipWhitespace()
         if (isQuotedStringStart(peek())) return NBTString(readQuotedString())
         val s = readString()
@@ -41,7 +41,7 @@ open class JsonToNBT internal constructor(
         else return type(s)
     }
 
-    private fun type(stringIn: String): Nbt {
+    private fun type(stringIn: String): NBT {
         try {
             when {
                 FLOAT_PATTERN.matcher(stringIn).matches() -> return NBTFloat(
@@ -108,7 +108,7 @@ open class JsonToNBT internal constructor(
     }
 
     @Throws(NBTException::class)
-    protected fun readValue(): Nbt {
+    protected fun readValue(): NBT {
         skipWhitespace()
         if (!this.canRead()) {
             throw exception("Expected value")
@@ -120,7 +120,7 @@ open class JsonToNBT internal constructor(
     }
 
     @Throws(NBTException::class)
-    protected fun readList(): Nbt =
+    protected fun readList(): NBT =
         if (this.canRead(2) && peek(1) != '"' && peek(2) == ';')
             readArrayTag()
         else readListTag()
@@ -149,15 +149,15 @@ open class JsonToNBT internal constructor(
     }
 
     @Throws(NBTException::class)
-    private fun readListTag(): Nbt {
+    private fun readListTag(): NBT {
         expect('[')
         skipWhitespace()
         if (!this.canRead()) throw exception("Expected value")
         val list = NBTList()
-        var type: Class<Nbt>? = null
+        var type: Class<NBT>? = null
         while (peek() != ']') {
             val snbt = readValue()
-            val ctype: Class<Nbt> = snbt.javaClass
+            val ctype: Class<NBT> = snbt.javaClass
             if (type == null) {
                 type = ctype
             } else if (type != ctype) {
@@ -174,7 +174,7 @@ open class JsonToNBT internal constructor(
     }
 
     @Throws(NBTException::class)
-    private fun readArrayTag(): Nbt {
+    private fun readArrayTag(): NBT {
         expect('[')
         val type = read()
         read()
@@ -190,7 +190,7 @@ open class JsonToNBT internal constructor(
 
     @Throws(NBTException::class)
     private inline fun <
-            reified TYPE : Nbt,
+            reified TYPE : NBT,
             reified E : NBTPrimitive<DATA>,
             reified DATA : Number>
             readArray(): Array<DATA> {

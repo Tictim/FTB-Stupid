@@ -1,31 +1,31 @@
 package ftb.stupid.nbt
 
-sealed class Nbt
+sealed class NBT
 
-class NBTObject : Nbt() {
-    private val _map = mutableMapOf<String, Nbt>()
+class NBTObject : NBT() {
+    private val _map = mutableMapOf<String, NBT>()
 
-    val map: Map<String, Nbt>
+    val map: Map<String, NBT>
         get() = _map
 
-    operator fun get(key: String): Nbt? = _map[key]
+    operator fun get(key: String): NBT? = _map[key]
     operator fun set(key: String, value: Any) {
         _map[key] = objectToSNBT(value)
     }
 
-    fun remove(key: String): Nbt? = _map.remove(key)
+    fun remove(key: String): NBT? = _map.remove(key)
 }
 
-sealed class NBTArray<E> : Nbt(), Iterable<E>{
+sealed class NBTArray<E> : NBT(), Iterable<E>{
     abstract val size: Int
 }
 
-class NBTList : NBTArray<Nbt>() {
-    private val _list = mutableListOf<Nbt>()
+class NBTList : NBTArray<NBT>() {
+    private val _list = mutableListOf<NBT>()
     override val size: Int
         get() = _list.size
 
-    val list: List<Nbt>
+    val list: List<NBT>
         get() = _list
 
     operator fun get(index: Int) = _list[index]
@@ -79,7 +79,7 @@ class NBTLongArray(longs: Array<Long>) : NBTArray<Long>() {
     override fun iterator() = _longs.iterator()
 }
 
-sealed class NBTPrimitive<E> : Nbt() {
+sealed class NBTPrimitive<E> : NBT() {
     abstract val value: E
 }
 
@@ -91,38 +91,38 @@ class NBTShort(override val value: Short) : NBTPrimitive<Short>()
 class NBTInt(override val value: Int) : NBTPrimitive<Int>()
 class NBTDouble(override val value: Double) : NBTPrimitive<Double>()
 
-object NBTEnd : Nbt()
+object NBTEnd : NBT()
 
-val Nbt.asObject: NBTObject
+val NBT.asObject: NBTObject
     get() = this as NBTObject
-val Nbt.asList: NBTList
+val NBT.asList: NBTList
     get() = this as NBTList
-val Nbt.asByteArray: NBTByteArray
+val NBT.asByteArray: NBTByteArray
     get() = this as NBTByteArray
-val Nbt.asIntArray: NBTIntArray
+val NBT.asIntArray: NBTIntArray
     get() = this as NBTIntArray
-val Nbt.asLongArray: NBTLongArray
+val NBT.asLongArray: NBTLongArray
     get() = this as NBTLongArray
-val Nbt.asString: NBTString
+val NBT.asString: NBTString
     get() = this as NBTString
-val Nbt.asFloat: NBTFloat
+val NBT.asFloat: NBTFloat
     get() = this as NBTFloat
-val Nbt.asByte: NBTByte
+val NBT.asByte: NBTByte
     get() = this as NBTByte
-val Nbt.asLong: NBTLong
+val NBT.asLong: NBTLong
     get() = this as NBTLong
-val Nbt.asShort: NBTShort
+val NBT.asShort: NBTShort
     get() = this as NBTShort
-val Nbt.asInt: NBTInt
+val NBT.asInt: NBTInt
     get() = this as NBTInt
-val Nbt.asDouble: NBTDouble
+val NBT.asDouble: NBTDouble
     get() = this as NBTDouble
-val Nbt.asEnd: NBTEnd
+val NBT.asEnd: NBTEnd
     get() = this as NBTEnd
 
 fun objectToSNBT(value: Any) =
     when (value) {
-        is Nbt -> value
+        is NBT -> value
         is String -> NBTString(value)
         is Float -> NBTFloat(value)
         is Byte -> NBTByte(value)
