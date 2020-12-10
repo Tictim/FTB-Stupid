@@ -53,33 +53,21 @@ class Localizer(private val rootFile: File) {
 	}
 
 	private fun convertData(nbt: NBTObject) {
-		nbt["title"]?.asString?.let {
-			translations["quest.title"] = it.value
-			nbt["title"] = "{quest.title}"
-		}
+		nbt.localize("title") { "quest.title" }
 	}
 
 	private fun convertChapters(nbt: NBTObject) {
 		val filename = nbt["filename"]!!.asString.value
 		val key = "quest.chapter.$filename"
 
-		nbt["title"]?.asString?.let {
-			translations["$key.title"] = it.value
-			nbt["title"] = "{$key.title}"
-		}
-
-		nbt["subtitle"]?.asString?.let {
-			translations["$key.subtitle"] = it.value
-			nbt["subtitle"] = "{$key.subtitle}"
-		}
+		nbt.localize("title") { "$key.title" }
+		nbt.localize("subtitle"){ "$key.subtitle" }
 
 		nbt["quests"]?.asList?.let { quests ->
 			for(o in quests.map { it.asObject }) {
 				val id = o["id"]!!.asInt.value
-				o["title"]?.asString?.let {
-					translations["$key.$id.title"] = it.value
-					nbt["title"] = "{$key.$id.title}"
-				}
+				o.localize("title"){ "$key.$id.title" }
+				o.localize("subtitle"){ "$key.$id.subtitle" }
 				o["description"]?.asList?.let { desc ->
 					var i = 0
 					for((idx, s) in desc.list.withIndex()) {
@@ -97,9 +85,14 @@ class Localizer(private val rootFile: File) {
 
 	private fun convertRewardTable(nbt: NBTObject) {
 		val id = nbt["id"]!!.asInt.value
-		nbt["title"]?.asString?.let {
-			translations["quest.reward.$id.title"] = it.value
-			nbt["title"] = "{quest.reward.$id.title}"
+		nbt.localize("title"){ "quest.reward.$id.title" }
+	}
+
+	private inline fun NBTObject.localize(nbtKey: String, langKey: ()->String){
+		this[nbtKey]?.asString?.let {
+			val lk = langKey()
+			translations[lk] = it.value
+			this[nbtKey] = "{$lk}"
 		}
 	}
 
