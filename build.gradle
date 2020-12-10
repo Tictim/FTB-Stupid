@@ -4,8 +4,8 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
-version '0.1.0'
+group 'ftb.stupid'
+version '0.1.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8

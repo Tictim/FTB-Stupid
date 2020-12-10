@@ -5,6 +5,7 @@ import kotlin.system.exitProcess
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
+
 const val SUCCESS = 0
 const val INVALID_OP = -1
 const val FAIL = 1

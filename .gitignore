@@ -128,3 +128,7 @@ gradle-app.setting
 **/build/
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij+iml,kotlin,gradle
+
+
+# just fuck off please
+.idea/*
